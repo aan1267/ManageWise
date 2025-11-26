@@ -1,11 +1,9 @@
 const Users = require("../models/usersSchema");
-const { cloudinary } = require("../multerconfig/cloudinaryConfig");
+const { cloudinary } = require("../config/cloudinaryConfig");
 
 //register user
 const registerUser = async (req, res) => {
   const { fname, lname, email, gender, location, status, mobile } = req.body;
-  //    console.log(fname,email,lname)
-  //    console.log(gender)
   console.log(req.file);
   if (
     !fname ||
@@ -29,12 +27,9 @@ const registerUser = async (req, res) => {
     if (user) {
       return res.status(401).json("This user already exist in our database");
     }
+   
 
-    let cloudResponse = null;
-    if (req.file) {
-      const file = req.file;
-      cloudResponse = await cloudinary.uploader.upload(file.path);
-    }
+    const profileUrl = req.file.path; // Cloudinary URL automatically available
 
     const newUser = new Users({
       fname,
@@ -44,17 +39,15 @@ const registerUser = async (req, res) => {
       location,
       status,
       mobile,
-      profile: cloudResponse.secure_url,
+      profile: profileUrl,
     });
 
     //  Save the user in the database
     const savedUser = await newUser.save();
-    return res
-      .status(201)
-      .json({ message: "User registered sucessfully !", user: savedUser });
+    return res.status(201).json({ message: "User registered sucessfully !", user: savedUser });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ error: "server error", e });
+    return res.status(500).json({ error: e.message });
   }
 };
 
@@ -66,8 +59,8 @@ const getallUsers = async (req, res) => {
       gender,
       status,
       sort = "",
-      // page = 1,
-      // limit = 5,
+      page = 1,
+      limit = 5,
     } = req.query;
 
     console.log(req.query);
@@ -88,25 +81,25 @@ const getallUsers = async (req, res) => {
       query.status = status;
     }
 
-    // const pageNumber = parseInt(page) 
-    // const limitNumber = parseInt(limit) 
+    const pageNumber = parseInt(page)
+    const limitNumber = parseInt(limit)
 
     // sort
     const sortOrder = sort == "new" ? -1 : 1;
-    const users = await Users.find(query)
-    .sort({ createdAt: sortOrder })
-    // .skip((pageNumber-1)* limit) //skips already fetched items.
-    // .limit(limitNumber)
+    const users = await Users.find(query).sort({ createdAt: sortOrder })
+     .skip((pageNumber - 1) * limit) //skips already fetched items.
+     .limit(limitNumber)
 
-    // const  total = await Users.countDocuments(query)
+    const total = await Users.countDocuments(query)
 
     res.status(200).json({
       success: true,
       users,
+      total,
     });
   } catch (e) {
-     console.log(e);
-     res.status(500).json({msg:"server error"})
+    console.log(e);
+    res.status(500).json({error : e.message });
   }
 };
 
@@ -115,9 +108,11 @@ const singleUser = async (req, res) => {
   const { id } = req.params;
   try {
     const userdata = await Users.findById(id);
-    res.status(200).json(userdata);
+    return res.status(200).json(userdata);
   } catch (e) {
-    res.status(401), json({ message: "Error fetching user", error: e.message });
+    return res
+      .status(401)
+      .json({ message: "Error fetching user", error: e.message });
   }
 };
 
@@ -144,10 +139,10 @@ const editUser = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    res.status(200).json({ updateUser });
+    return res.status(200).json({ updateUser });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ error: e.message });
+    return res.status(500).json({ error: e.message });
   }
 };
 
@@ -158,9 +153,9 @@ const deleteUser = async (req, res) => {
 
   try {
     const deleteuser = await Users.findByIdAndDelete(id);
-    res.status(200).json({ deleteuser });
+    return res.status(200).json({ deleteuser });
   } catch (e) {
-    res.status(500).json({ error: e });
+    return res.status(500).json({ error: e });
   }
 };
 
@@ -174,9 +169,9 @@ const userstatus = async (req, res) => {
       { status: data },
       { new: true, runValidators: true }
     );
-    res.status(200).json({ changestatus });
+    return res.status(200).json({ changestatus });
   } catch (e) {
-    res.status(500).json({ error: e });
+    return res.status(500).json({ error: e });
   }
 };
 
