@@ -27,7 +27,6 @@ const registerUser = async (req, res) => {
     if (user) {
       return res.status(401).json("This user already exist in our database");
     }
-   
 
     const profileUrl = req.file.path; // Cloudinary URL automatically available
 
@@ -44,7 +43,9 @@ const registerUser = async (req, res) => {
 
     //  Save the user in the database
     const savedUser = await newUser.save();
-    return res.status(201).json({ message: "User registered sucessfully !", user: savedUser });
+    return res
+      .status(201)
+      .json({ message: "User registered sucessfully !", user: savedUser });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: e.message });
@@ -68,9 +69,12 @@ const getallUsers = async (req, res) => {
     console.log(gender);
 
     const query = {};
-
+    
     if (search) {
-      query.fname = { $regex: search, $options: "i" };
+       query.$or = [
+           {fname : { $regex: search, $options: "i" }},
+           {email : { $regex: search, $options: "i" }}
+       ]
     }
 
     if (gender && gender !== "All") {
@@ -81,16 +85,17 @@ const getallUsers = async (req, res) => {
       query.status = status;
     }
 
-    const pageNumber = parseInt(page)
-    const limitNumber = parseInt(limit)
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
 
     // sort
     const sortOrder = sort == "new" ? -1 : 1;
-    const users = await Users.find(query).sort({ createdAt: sortOrder })
-     .skip((pageNumber - 1) * limit) //skips already fetched items.
-     .limit(limitNumber)
+    const users = await Users.find(query)
+      .sort({ createdAt: sortOrder })
+      .skip((pageNumber - 1) * limit) //skips already fetched items
+      .limit(limitNumber);
 
-    const total = await Users.countDocuments(query)
+    const total = await Users.countDocuments(query);
 
     res.status(200).json({
       success: true,
@@ -99,7 +104,7 @@ const getallUsers = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    res.status(500).json({error : e.message });
+    res.status(500).json({ error: e.message });
   }
 };
 
