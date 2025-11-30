@@ -1,3 +1,4 @@
+// Context API = global shared data
 import React, { createContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 
