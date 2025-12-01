@@ -11,10 +11,6 @@ const userSchema = Joi.object({
     location: Joi.string().required(),
 })
 
-const validateUser = (req,res,next)=>{
-     const {error} = userSchema.validate(req.body);
-     if(error) res.status(400).json({success:false,msg:error.details[0].message})
-     next();
-}
 
-module.exports = {validateUser}
+
+module.exports = {userSchema};
