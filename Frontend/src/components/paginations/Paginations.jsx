@@ -1,29 +1,56 @@
-import React from 'react'
-import Pagination from 'react-bootstrap/Pagination';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-function Paginations({handlePrevBtn ,handleNextBtn,page ,setPage,pageCount}) {
+const getWindowPages = (current, total, windowSize) => {
+  let start = current;
+  let end = start + windowSize - 1; // fixed window size 5 every time
+//  The end value should never go beyond the total number of pages — only the start value shifts to slide the window.
+ if (end > total) {  
+    end = total; 
+    start = Math.max(1, end - windowSize + 1);
+  }
+  // task -> array create 
+  const pages = [];
+  for (let i = start; i <= end; i++) pages.push(i);
+  return pages;
+};
+
+export function PaginationDemo({ page, totalPages, onPageChange }) {
+  const pages = getWindowPages(page, totalPages, 5);
   return (
-    <>
-    {
-        pageCount > 0 && <div className="mt-5 position-absolute right-[20px] ">
-        <Pagination
-        >
-        <Pagination.Prev onClick={()=>handlePrevBtn()}/>
-         {/* {
-            Array(pageCount).fill(null).map((el,index)=>{
-                return(
-                    <Pagination.Item onClick={setPage(index+1)} active>{index+1}</Pagination.Item>
-                )
-            })
-         } */}
-          <Pagination.Item active>{1}</Pagination.Item>
-        <Pagination.Next onClick={()=>handleNextBtn()}/>
-      </Pagination>
-      </div>
-    }
-    
-    </>
-  )
-}
+    <Pagination>
+      <PaginationContent>
+        {/* previous button */}
+        {page != 1 && (
+          <PaginationPrevious
+            onClick={() => onPageChange(page - 1)}
+            disabled={page === 1}
+          />
+        )}
+        {/*  number */}
+        {pages.map((pageNum) => (
+            <PaginationItem key={pageNum}>
+              <PaginationLink
+                isActive={pageNum === page}
+                onClick={() => onPageChange(pageNum)}
+              >
+                {pageNum}
+              </PaginationLink>
+            </PaginationItem>
+        ))}
 
-export default Paginations
+        {/* next */}
+        <PaginationNext
+          onClick={() => onPageChange(page + 1)}
+          disabled={page == totalPages}
+        />
+      </PaginationContent>
+    </Pagination>
+  )
+};
