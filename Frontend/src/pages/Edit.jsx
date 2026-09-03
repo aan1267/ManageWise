@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Form } from "react-bootstrap";
-import Select from "react-select";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import {singleusergetfunc,edituserfunc } from "../services/Apis";
 import { UserContext } from "../components/context/ContextProvider";
@@ -116,7 +114,6 @@ function Edit() {
              handleImageChange ={handleImageChange}
              getImageName={getImageName}
            />
-          <ToastContainer position="top-center" toClose={5000} />
         </div>
       </div>
     </>
@@ -127,12 +124,3 @@ export default Edit;
 
 
 
-
-
-// const handleInputValue = (e) => {
-//     const { name, value } = e.target;
-//     setInputData({
-//       ...inputdata,
-//       [name]: value,
-//     });
-//   };
