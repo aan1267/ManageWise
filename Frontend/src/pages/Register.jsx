@@ -1,6 +1,6 @@
 import React, { useState, useEffect,useContext} from "react";
 import { Spinner } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { register } from "../services/Apis.js";
 import {useNavigate} from "react-router-dom"
 import { UserContext } from "../components/context/ContextProvider.jsx";
@@ -15,14 +15,15 @@ function Register() {
   const [previewImage, setPreviewImage] = useState("");
 
   const navigate = useNavigate();
-  const {useradd, setUserAdd} = useContext(UserContext)
+  // const {useradd, setUserAdd} = useContext(UserContext) eslint error as i am not use useradd anywhere in this page 
+  const {setUserAdd} = useContext(UserContext)
 
-  const setProfile = (e) => {
-    setImage(e.target.files[0]);
-  };
+  // const setProfile = (e) => {
+  //   setImage(e.target.files[0]);
+  // };
 
   const handleFormSubmit = async (formDataFromUser) => {
-      
+     try{ 
       const formData = new FormData();
       Object.keys(formDataFromUser).map( key => {
        formData.append(key,formDataFromUser[key])
@@ -33,22 +34,25 @@ function Register() {
       }
 
       const config = {
-        "Content-Type": "multipart/form-data",
+        headers:{"Content-Type": "multipart/form-data"},
       };
 
       const res = await register(formData, config);
 
       console.log(res);
-      if(res.status === 201){
+      
+        if(res.status === 201){
          toast.success("User registered successfully");
          setImage(null);
          setPreviewImage("");
          setUserAdd(res.data.user) // so that access in home page
-      }else{
-         toast.error("error")
+         navigate("/")
       }
-          navigate("/")
+    }catch(e){
+         console.log(e);
+         toast.error(e.res.data)
     }
+  }
 
     const  handleImageChange  = (e) => {
     const file = e.target.files[0];
@@ -88,7 +92,6 @@ function Register() {
              handleImageChange ={handleImageChange}
              getImageName={getImageName}
              />
-            <ToastContainer position="top-center" toClose={5000} />
           </div>
         </div>
       )}
@@ -97,6 +100,7 @@ function Register() {
 }
 
 export default Register;
+
 
 //what i learn
 // 1)  public folder images path => /img.jpeg , /aanchal.jpeg
@@ -111,9 +115,8 @@ export default Register;
 // defined (using w-full, h-screen, or custom values).
 
 
-// when user registered then navigate to home page that page one 
-// alert show user registered sucessfully for that we create one context 
-// check in virtualvista end call logic
+// when user registered then navigate to home page that page one  
+
 
 
  // key should match with value={}
