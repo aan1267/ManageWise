@@ -1,0 +1,30 @@
+services:
+
+  backend:
+    build:
+      context: ./Backend
+    environment : 
+       PORT: ${SERVER_PORT}
+       MONGO_URL: ${MONGO_URL} 
+       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+   
+
+  frontend:
+    build:
+      context: ./Frontend 
+      args:
+         VITE_API_URI: /api
+    depends_on:
+      - backend 
+    ports:
+       - "${CLIENT_PORT}:80"
+  
+  
+   
+
+
+    
