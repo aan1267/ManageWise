@@ -226,3 +226,41 @@ function Home() {
 
 export default Home;
 
+
+// useSearchParams se sab states (search, filter, sort, page) URL me 
+// reflect hote hain aur refresh ke baad bhi retain ho jate hain.
+
+//create function to load more
+// const getMoreUser = async()=>{
+//  const nextPage = page ? page + 1 : 1
+
+//  const res = await usergetfunc(search, gender, status, sort, nextPage)
+//   if(res.status == 200){
+//     if(res.data.users.length == 0){
+//       setHasMore(false)
+//       return
+//     }
+//        console.log(res)
+//     setAllUsers(prev => [...prev,...res.data.users]) // append users
+//     setPage(nextPage)
+//   }
+// }
+// <InfiniteScroll
+//           dataLength ={allusers.length}
+//           hasMore = {hasMore}
+//           next = {getMoreUser}
+//           loader = {<h4><Spiner/></h4>}
+//           endMessage = {<p className="textAlign:center">No more Users</p>}
+//          ></InfiniteScroll>
+////Home.jsx → API call + states
+
+// mistake 
+// error due to your search was not work due to not mention value attritube as value change to value aaye na value ={search}
+// dynamic search (onChange) no need button
+
+// feature of  these project i add 
+// Dynamic search, sorting, filtering
+// Form validation (frontend + backend)
+// Global state management using Context API
+// CRUD operations: add, view, delete users
+// Image upload with Cloudinarycd 
