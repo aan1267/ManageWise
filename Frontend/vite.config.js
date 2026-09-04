@@ -1,32 +1,18 @@
+import path from "path";
+import { defineConfig } from 'vite'
+import { fileURLToPath } from "url";
+import react from '@vitejs/plugin-react'
+import tailwindcss from "@tailwindcss/vite"
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
-import { fileURLToPath, URL } from "node:url";
+
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+       "@": path.resolve(__dirname, "./src"),
     },
   },
-});
-// import path from "path";
-// import { defineConfig } from 'vite'
-// import { fileURLToPath } from "url";
-// import react from '@vitejs/plugin-react'
-// import tailwindcss from "@tailwindcss/vite"
-// // const __filename = fileURLToPath(import.meta.url);
-// // const __dirname = path.dirname(__filename);
-
-
-
-// export default defineConfig({
-//    plugins: [react(), tailwindcss()],
-//   resolve: {
-//     alias: {
-//        "@": path.resolve(__dirname, "./src"),
-//     },
-//   },
-// })
+})
