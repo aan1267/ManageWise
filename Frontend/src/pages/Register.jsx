@@ -15,8 +15,7 @@ function Register() {
   const [previewImage, setPreviewImage] = useState("");
 
   const navigate = useNavigate();
-  // const {useradd, setUserAdd} = useContext(UserContext) eslint error as i am not use useradd anywhere in this page 
-  const {setUserAdd} = useContext(UserContext)
+   const { setUserAdd } = useContext(UserContext)
 
   // const setProfile = (e) => {
   //   setImage(e.target.files[0]);
