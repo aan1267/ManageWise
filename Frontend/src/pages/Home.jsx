@@ -30,7 +30,7 @@ function Home() {
   const { useradd, setUserAdd, update, delUser, setDelUser } =
     useContext(UserContext);
 
-  console.log(useradd);
+  // console.log(useradd);
   const adduser = () => {
     navigate("/register");
   };
