@@ -124,3 +124,12 @@ export default Edit;
 
 
 
+
+
+// const handleInputValue = (e) => {
+//     const { name, value } = e.target;
+//     setInputData({
+//       ...inputdata,
+//       [name]: value,
+//     });
+//   };
