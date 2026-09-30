@@ -10,12 +10,14 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
    plugins: [react(), tailwindcss()],
-  preview: {
-    allowedHosts: ['managewisefrontend.onrender.com']
-  },
-  resolve: {
+   resolve: {
     alias: {
        "@": path.resolve(__dirname, "./src"),
     },
+   server: {
+    port: 8080, 
+    host: '0.0.0.0',
+    strictPort: true,
+  },
   },
 })
