@@ -16,7 +16,7 @@ export default defineConfig({
   // render deploy need 
   preview: {
     host: "0.0.0.0",
-    port: 5173,
+    port: 4173,
   },
   server: {
     port: 8080, // if you want to run website on local machine then you need to just change port 8080 to 5173 
